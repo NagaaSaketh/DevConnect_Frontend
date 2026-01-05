@@ -15,7 +15,11 @@ const EditProfile = ({ user }) => {
   );
 
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [displayPass, setDisplayPass] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
   const previewSkills =
@@ -61,6 +65,7 @@ const EditProfile = ({ user }) => {
         }
       );
       dispatch(addUser(response?.data?.data));
+      setToastMessage("Profile saved successfully");
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
@@ -69,6 +74,30 @@ const EditProfile = ({ user }) => {
       console.log(err);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleChangePassword = () => {
+    setDisplayPass(true);
+  };
+
+  const updatePassword = async () => {
+    try {
+      if (!newPassword) return;
+      const response = await axios.put(
+        "http://localhost:4000/profile/password",
+        { password: newPassword },
+        { withCredentials: true }
+      );
+      setToastMessage("Password updated successfully");
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+      setNewPassword("");
+      setDisplayPass(false);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -159,8 +188,66 @@ const EditProfile = ({ user }) => {
                 onClick={saveProfile}
                 disabled={isLoading}
               >
-                {isLoading ? "Saving..." : "Save Profile"}
+                {isLoading ? (
+                  <>
+                    <span className="loading loading-spinner loading-sm"></span>
+                    Saving...
+                  </>
+                ) : (
+                  "Save Profile"
+                )}
               </button>
+              <button
+                onClick={handleChangePassword}
+                className="btn hover:bg-blue-500"
+              >
+                Change Password
+              </button>
+              {displayPass && (
+                <div className="p-4 mt-4 border-t border-base-200">
+                  <fieldset className="fieldset">
+                    <legend className="fieldset-legend">New Password:</legend>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={newPassword}
+                        className="input w-full pr-10"
+                        placeholder="Enter new password"
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        required
+                      />
+                      <img
+                        className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 cursor-pointer"
+                        onClick={() => setShowPassword(!showPassword)}
+                        src={
+                          showPassword
+                            ? "https://www.svgrepo.com/show/380007/eye-password-hide.svg"
+                            : "https://www.svgrepo.com/show/380010/eye-password-show.svg"
+                        }
+                        alt="toggle password"
+                      />
+                    </div>
+                  </fieldset>
+                  <div className="flex gap-2 mt-3">
+                    <button
+                      onClick={updatePassword}
+                      className="btn btn-outline rounded-4xl btn-success"
+                    >
+                      Update
+                    </button>
+                    <button
+                      onClick={() => {
+                        setDisplayPass(false);
+                        setNewPassword("");
+                        setShowPassword(false);
+                      }}
+                      className="btn btn-error rounded-4xl btn-outline"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -180,7 +267,7 @@ const EditProfile = ({ user }) => {
       {showToast && (
         <div className="toast toast-top toast-center pt-20 ">
           <div className="alert alert-success">
-            <span>Profile saved successfully</span>
+            <span>{toastMessage}</span>
           </div>
         </div>
       )}

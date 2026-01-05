@@ -29,7 +29,7 @@ const Connections = () => {
   if (connections.length === 0) {
     return (
       <div className="flex justify-center items-center my-20">
-        <h1 className="text-3xl font-bold text-gray-400">
+        <h1 className="text-3xl font-stretch-expanded font-bold text-gray-400">
           No Connections found!
         </h1>
       </div>

@@ -32,7 +32,7 @@ const NavBar = () => {
         </Link>
 
         <span className="font-stretch-expanded flex items-center gap-2 text-md">
-          <span>Where developers</span>
+          <span>Developers</span>
 
           <span className="text-rotate">
             <span>
@@ -52,11 +52,7 @@ const NavBar = () => {
 
       <div className="flex gap-2">
         <label className="swap swap-rotate">
-          <input
-            type="checkbox"
-            className="theme-controller"
-            value="light"
-          />
+          <input type="checkbox" className="theme-controller" value="light" />
           <svg
             className="swap-off h-5 w-5 fill-current"
             xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +70,9 @@ const NavBar = () => {
         </label>
         {user && (
           <div className="dropdown dropdown-end flex mx-5">
-            <p className="px-5 flex font-stretch-expanded items-center">Welcome, {user.firstName} </p>
+            <p className="px-5 flex font-stretch-expanded items-center">
+              Welcome, {user.firstName}
+            </p>
             <div
               tabIndex={0}
               role="button"
