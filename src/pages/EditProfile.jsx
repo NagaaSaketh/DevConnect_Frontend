@@ -15,12 +15,20 @@ const EditProfile = ({ user }) => {
   );
 
   const [showToast, setShowToast] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   const previewSkills =
     skills.trim().length > 0
       ? skills.split(",").map((skill) => skill.trim())
       : [];
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPhotoUrl(file);
+    }
+  };
 
   const saveProfile = async () => {
     const formattedSkills =
@@ -29,19 +37,27 @@ const EditProfile = ({ user }) => {
         : [];
 
     try {
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("age", age);
+      formData.append("gender", gender);
+      formData.append("about", about);
+      formData.append("skills", formattedSkills);
+
+      if (photoUrl instanceof File) {
+        formData.append("photo", photoUrl);
+      }
+
       const response = await axios.put(
         "http://localhost:4000/profile/edit",
-        {
-          firstName,
-          lastName,
-          age,
-          gender,
-          about,
-          photoUrl,
-          skills: formattedSkills,
-        },
+        formData,
         {
           withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       dispatch(addUser(response?.data?.data));
@@ -51,6 +67,8 @@ const EditProfile = ({ user }) => {
       }, 3000);
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,7 +77,9 @@ const EditProfile = ({ user }) => {
       <div className="flex justify-center mx-10">
         <div className="card bg-base-300 w-96 shadow-sm">
           <div className="card-body">
-            <h2 className="card-title font-stretch-expanded justify-center">Edit Profile</h2>
+            <h2 className="card-title font-stretch-expanded justify-center">
+              Edit Profile
+            </h2>
             <div className="p-4">
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">First Name:</legend>
@@ -82,13 +102,11 @@ const EditProfile = ({ user }) => {
                 />
               </fieldset>
               <fieldset className="fieldset">
-                <legend className="fieldset-legend">Photo URL:</legend>
+                <legend className="fieldset-legend">Upload Photo:</legend>
                 <input
-                  type="text"
-                  value={photoUrl}
-                  className="input"
-                  onChange={(e) => setPhotoUrl(e.target.value)}
-                  required
+                  onChange={handleImageUpload}
+                  type="file"
+                  className="file-input file-input-sm"
                 />
               </fieldset>
               <fieldset className="fieldset">
@@ -136,8 +154,12 @@ const EditProfile = ({ user }) => {
               </fieldset>
             </div>
             <div className="card-actions justify-center">
-              <button className="btn btn-primary" onClick={saveProfile}>
-                Save Profile
+              <button
+                className="btn btn-primary"
+                onClick={saveProfile}
+                disabled={isLoading}
+              >
+                {isLoading ? "Saving..." : "Save Profile"}
               </button>
             </div>
           </div>
@@ -150,7 +172,8 @@ const EditProfile = ({ user }) => {
           age,
           gender,
           about,
-          photoUrl,
+          photoUrl:
+            photoUrl instanceof File ? URL.createObjectURL(photoUrl) : photoUrl,
           skills: previewSkills,
         }}
       />
