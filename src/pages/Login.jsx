@@ -68,9 +68,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    setErrorMessage("Coming soon!!!");
-    setShowError(true);
-    setTimeout(() => setShowError(false), 3000);
+    window.location.href = "http://localhost:4000/auth/google";
   };
 
   return (
