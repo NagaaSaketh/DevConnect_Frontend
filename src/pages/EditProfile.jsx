@@ -1,18 +1,23 @@
-import { useState } from "react";
+// pages/EditProfile.jsx
+import { useState, useEffect } from "react";
 import axios from "axios";
 import UserCard from "../Components/UserCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-const EditProfile = ({ user }) => {
-  const [firstName, setFirstName] = useState(user.firstName);
-  const [lastName, setLastName] = useState(user.lastName);
-  const [photoUrl, setPhotoUrl] = useState(user.photoUrl);
-  const [age, setAge] = useState(user.age || "");
-  const [gender, setGender] = useState(user.gender || "");
-  const [about, setAbout] = useState(user.about);
-  const [skills, setSkills] = useState(
-    Array.isArray(user.skills) ? user.skills.join(", ") : ""
-  );
+import { useNavigate } from "react-router-dom";
+
+const EditProfile = () => {
+  const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
+  const [about, setAbout] = useState("");
+  const [skills, setSkills] = useState("");
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -21,7 +26,19 @@ const EditProfile = ({ user }) => {
   const [newPassword, setNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const dispatch = useDispatch();
+  // Initialize form with user data
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.firstName || "");
+      setLastName(user.lastName || "");
+      setPhotoUrl(user.photoUrl || "");
+      setAge(user.age || "");
+      setGender(user.gender || "");
+      setAbout(user.about || "");
+      setSkills(Array.isArray(user.skills) ? user.skills.join(", ") : "");
+    }
+  }, [user]);
+
   const previewSkills =
     skills.trim().length > 0
       ? skills.split(",").map((skill) => skill.trim())
@@ -65,13 +82,19 @@ const EditProfile = ({ user }) => {
         }
       );
       dispatch(addUser(response?.data?.data));
-      setToastMessage("Profile saved successfully");
+      setToastMessage("Profile saved successfully!");
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+        navigate("/profile");
+      }, 2000);
+    } catch (err) {
+      console.log(err);
+      setToastMessage("Failed to save profile");
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
       }, 3000);
-    } catch (err) {
-      console.log(err);
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +112,7 @@ const EditProfile = ({ user }) => {
         { password: newPassword },
         { withCredentials: true }
       );
-      setToastMessage("Password updated successfully");
+      setToastMessage("Password updated successfully!");
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
@@ -98,8 +121,21 @@ const EditProfile = ({ user }) => {
       setDisplayPass(false);
     } catch (err) {
       console.log(err);
+      setToastMessage("Failed to update password");
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
     }
   };
+
+  if (!user) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center my-10">
@@ -203,52 +239,52 @@ const EditProfile = ({ user }) => {
               >
                 Change Password
               </button>
-              {displayPass && (
-                <div className="p-4 mt-4 border-t border-base-200">
-                  <fieldset className="fieldset">
-                    <legend className="fieldset-legend">New Password:</legend>
-                    <div className="relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        value={newPassword}
-                        className="input w-full pr-10"
-                        placeholder="Enter new password"
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                      />
-                      <img
-                        className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 cursor-pointer"
-                        onClick={() => setShowPassword(!showPassword)}
-                        src={
-                          showPassword
-                            ? "https://www.svgrepo.com/show/380007/eye-password-hide.svg"
-                            : "https://www.svgrepo.com/show/380010/eye-password-show.svg"
-                        }
-                        alt="toggle password"
-                      />
-                    </div>
-                  </fieldset>
-                  <div className="flex gap-2 mt-3">
-                    <button
-                      onClick={updatePassword}
-                      className="btn btn-outline rounded-4xl btn-success"
-                    >
-                      Update
-                    </button>
-                    <button
-                      onClick={() => {
-                        setDisplayPass(false);
-                        setNewPassword("");
-                        setShowPassword(false);
-                      }}
-                      className="btn btn-error rounded-4xl btn-outline"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
+            {displayPass && (
+              <div className="p-4 mt-4 border-t border-base-200">
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">New Password:</legend>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={newPassword}
+                      className="input w-full pr-10"
+                      placeholder="Enter new password"
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                    />
+                    <img
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 cursor-pointer"
+                      onClick={() => setShowPassword(!showPassword)}
+                      src={
+                        showPassword
+                          ? "https://www.svgrepo.com/show/380007/eye-password-hide.svg"
+                          : "https://www.svgrepo.com/show/380010/eye-password-show.svg"
+                      }
+                      alt="toggle password"
+                    />
+                  </div>
+                </fieldset>
+                <div className="flex gap-2 mt-3">
+                  <button
+                    onClick={updatePassword}
+                    className="btn btn-outline rounded-4xl btn-success"
+                  >
+                    Update
+                  </button>
+                  <button
+                    onClick={() => {
+                      setDisplayPass(false);
+                      setNewPassword("");
+                      setShowPassword(false);
+                    }}
+                    className="btn btn-error rounded-4xl btn-outline"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

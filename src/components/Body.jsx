@@ -5,15 +5,19 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { addRequests } from "../utils/requestSlice";
-import { useEffect } from "react";
+import { useState,useEffect } from "react";
 
 const Body = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchUser = async () => {
-    if (user) return;
+    if (user) {
+      setIsLoading(false);
+      return
+    }
 
     try {
       const response = await axios.get(
@@ -25,6 +29,8 @@ const Body = () => {
       if (err.response?.status === 401) {
         navigate("/login");
       }
+    }finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,6 +55,14 @@ const Body = () => {
       fetchRequests();
     }
   }, [user]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">

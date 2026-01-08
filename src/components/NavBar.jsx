@@ -31,8 +31,8 @@ const NavBar = () => {
           🧑🏻‍💻 DevConnect
         </Link>
 
-        <span className="font-stretch-expanded flex items-center gap-2 text-md">
-          <span>Developers</span>
+        <span className="font-stretch-expanded flex items-center gap-2 text-sm">
+          <span>Where Developers</span>
 
           <span className="text-rotate">
             <span>
