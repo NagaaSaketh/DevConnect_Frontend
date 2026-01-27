@@ -4,6 +4,6 @@ export const createSocketConnection = () => {
   if (location.hostname === "localhost") {
     return io("http://localhost:4000");
   } else {
-    return io("/", { path: "/api/socket.io" });
+    return io("https://dev-connect-backend-opal.vercel.app");
   }
 };

@@ -72,7 +72,7 @@ const EditProfile = () => {
       }
 
       const response = await axios.put(
-        "http://localhost:4000/profile/edit",
+        "https://dev-connect-backend-opal.vercel.app/profile/edit",
         formData,
         {
           withCredentials: true,
@@ -108,7 +108,7 @@ const EditProfile = () => {
     try {
       if (!newPassword) return;
       const response = await axios.put(
-        "http://localhost:4000/profile/password",
+        "https://dev-connect-backend-opal.vercel.app/profile/password",
         { password: newPassword },
         { withCredentials: true }
       );

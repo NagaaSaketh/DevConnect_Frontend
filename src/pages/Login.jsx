@@ -29,7 +29,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/login",
+        "https://dev-connect-backend-opal.vercel.app/login",
         { emailID: email, password },
         { withCredentials: true }
       );
@@ -45,7 +45,7 @@ const Login = () => {
   const handleSignUp = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/signup",
+        "https://dev-connect-backend-opal.vercel.app/signup",
         {
           firstName,
           lastName,
@@ -64,11 +64,11 @@ const Login = () => {
   };
 
   const handleGitHubLogin = () => {
-    window.location.href = "http://localhost:4000/auth/github";
+    window.location.href = "https://dev-connect-backend-opal.vercel.app/auth/github";
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:4000/auth/google";
+    window.location.href = "https://dev-connect-backend-opal.vercel.app/auth/google";
   };
 
   return (

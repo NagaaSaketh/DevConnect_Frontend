@@ -12,7 +12,7 @@ const UserCard = ({ user }) => {
   const handleSendRequest = async (status, id) => {
     try {
       const response = await axios.post(
-        `http://localhost:4000/request/send/${status}/${id}`,
+        `https://dev-connect-backend-opal.vercel.app/request/send/${status}/${id}`,
         {},
         { withCredentials: true }
       );

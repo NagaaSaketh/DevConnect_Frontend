@@ -21,7 +21,7 @@ const Body = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:4000/profile/view",
+        "https://dev-connect-backend-opal.vercel.app/profile/view",
         { withCredentials: true }
       );
       dispatch(addUser(response.data));
@@ -37,7 +37,7 @@ const Body = () => {
   const fetchRequests = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/user/requests/received",
+        "https://dev-connect-backend-opal.vercel.app/user/requests/received",
         { withCredentials: true }
       );
       dispatch(addRequests(response.data.connectionRequests));

@@ -11,7 +11,7 @@ const Connections = () => {
   const fetchConnections = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/user/connections",
+        "https://dev-connect-backend-opal.vercel.app/user/connections",
         { withCredentials: true }
       );
       dispatch(addConnections(response.data));

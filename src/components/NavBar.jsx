@@ -10,7 +10,7 @@ const NavBar = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:4000/logout",
+        "https://dev-connect-backend-opal.vercel.app/logout",
         {},
         { withCredentials: true }
       );

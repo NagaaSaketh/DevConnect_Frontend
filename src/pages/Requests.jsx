@@ -9,7 +9,7 @@ const Requests = () => {
   const fetchRequests = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/user/requests/received",
+        "https://dev-connect-backend-opal.vercel.app/user/requests/received",
         { withCredentials: true }
       );
       dispatch(addRequests(response.data.connectionRequests));
@@ -21,7 +21,7 @@ const Requests = () => {
   const reviewRequest = async (status, id) => {
     try {
       await axios.post(
-        `http://localhost:4000/request/review/${status}/${id}`,
+        `https://dev-connect-backend-opal.vercel.app/request/review/${status}/${id}`,
         {},
         { withCredentials: true }
       );

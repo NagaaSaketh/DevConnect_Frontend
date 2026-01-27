@@ -24,7 +24,7 @@ const Chat = () => {
   const fetchChatMessages = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/chat/${targetUserId}`,
+        `https://dev-connect-backend-opal.vercel.app/chat/${targetUserId}`,
         { withCredentials: true }
       );
       console.log(response?.data?.messages);

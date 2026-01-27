@@ -13,7 +13,7 @@ const Feed = () => {
   const fetchFeed = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:4000/feed", {
+      const response = await axios.get("https://dev-connect-backend-opal.vercel.app/feed", {
         withCredentials: true,
       });
       dispatch(addFeed(response.data));
