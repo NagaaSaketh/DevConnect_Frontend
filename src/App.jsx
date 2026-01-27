@@ -10,13 +10,22 @@ import Connections from "./pages/Connections";
 import Requests from "./pages/Requests";
 import Chat from "./pages/Chat";
 
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+
 function App() {
+  const user = useSelector((store) => store.user);
+
   return (
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Body />}>
+
+          <Route
+            path="/"
+            element={user ? <Body /> : <Navigate to="/login" />}
+          >
             <Route index element={<Feed />} />
             <Route path="profile" element={<Profile />} />
             <Route path="connections" element={<Connections />} />
@@ -28,5 +37,6 @@ function App() {
     </Provider>
   );
 }
+
 
 export default App;
