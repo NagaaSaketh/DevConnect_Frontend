@@ -1,7 +1,7 @@
 // pages/EditProfile.jsx
 import { useState, useEffect } from "react";
 import axios from "axios";
-import UserCard from "../Components/UserCard";
+import UserCard from "../components/UserCard";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
