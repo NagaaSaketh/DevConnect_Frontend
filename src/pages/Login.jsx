@@ -3,6 +3,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -29,9 +30,9 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/login",
+        BASE_URL + "/login",
         { emailID: email, password },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       dispatch(addUser(response.data));
       navigate("/");
@@ -45,14 +46,14 @@ const Login = () => {
   const handleSignUp = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/signup",
+        BASE_URL + "/signup",
         {
           firstName,
           lastName,
           emailID: email,
           password,
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       dispatch(addUser(response.data.data));
       navigate("/profile");
@@ -64,11 +65,11 @@ const Login = () => {
   };
 
   const handleGitHubLogin = () => {
-    window.location.href = "http://localhost:4000/auth/github";
+    window.location.href = BASE_URL + "/auth/github";
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:4000/auth/google";
+    window.location.href = BASE_URL + "/auth/google";
   };
 
   return (

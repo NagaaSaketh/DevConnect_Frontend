@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
+import { BASE_URL } from "../utils/constants";
 const UserCard = ({ user }) => {
   const { firstName, lastName, age, gender, about, photoUrl, skills } = user;
   const validSkills = Array.isArray(skills)
@@ -12,9 +13,9 @@ const UserCard = ({ user }) => {
   const handleSendRequest = async (status, id) => {
     try {
       const response = await axios.post(
-        `http://localhost:4000/request/send/${status}/${id}`,
+        BASE_URL + `/request/send/${status}/${id}`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       dispatch(removeUserFromFeed(id));
     } catch (err) {
@@ -29,7 +30,9 @@ const UserCard = ({ user }) => {
         <img src={photoUrl} alt="photo" />
       </figure>
       <div className="card-body">
-        <h2 className="card-title font-stretch-expanded">{firstName + " " + lastName}</h2>
+        <h2 className="card-title font-stretch-expanded">
+          {firstName + " " + lastName}
+        </h2>
         {age && gender && <p>{age + " " + gender}</p>}
         <p>{about}</p>
 

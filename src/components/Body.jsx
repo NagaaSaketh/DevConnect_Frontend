@@ -5,7 +5,8 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { addRequests } from "../utils/requestSlice";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
+import { BASE_URL } from "../utils/constants";
 
 const Body = () => {
   const dispatch = useDispatch();
@@ -16,30 +17,28 @@ const Body = () => {
   const fetchUser = async () => {
     if (user) {
       setIsLoading(false);
-      return
+      return;
     }
 
     try {
-      const response = await axios.get(
-        "http://localhost:4000/profile/view",
-        { withCredentials: true }
-      );
+      const response = await axios.get(BASE_URL + "/profile/view", {
+        withCredentials: true,
+      });
       dispatch(addUser(response.data));
     } catch (err) {
       if (err.response?.status === 401) {
         navigate("/login");
       }
-    }finally {
+    } finally {
       setIsLoading(false);
     }
   };
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:4000/user/requests/received",
-        { withCredentials: true }
-      );
+      const response = await axios.get(BASE_URL + "/user/requests/received", {
+        withCredentials: true,
+      });
       dispatch(addRequests(response.data.connectionRequests));
     } catch (err) {
       console.error(err);

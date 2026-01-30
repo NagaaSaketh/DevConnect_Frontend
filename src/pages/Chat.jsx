@@ -4,12 +4,13 @@ import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
 
 const Chat = () => {
   const { targetUserId } = useParams();
   const { state } = useLocation();
   console.log(targetUserId);
-  
+
   const firstName = state?.firstName;
 
   const lastName = state?.lastName;
@@ -23,10 +24,9 @@ const Chat = () => {
 
   const fetchChatMessages = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:4000/chat/${targetUserId}`,
-        { withCredentials: true }
-      );
+      const response = await axios.get(BASE_URL + `/chat/${targetUserId}`, {
+        withCredentials: true,
+      });
       console.log(response?.data?.messages);
 
       const chatMessages = response?.data?.messages.map((msg) => {

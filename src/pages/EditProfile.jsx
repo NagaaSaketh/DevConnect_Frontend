@@ -5,6 +5,7 @@ import UserCard from "../components/UserCard";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
 
 const EditProfile = () => {
   const user = useSelector((store) => store.user);
@@ -71,16 +72,12 @@ const EditProfile = () => {
         formData.append("photo", photoUrl);
       }
 
-      const response = await axios.put(
-        "http://localhost:4000/profile/edit",
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.put(BASE_URL + "/profile/edit", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       dispatch(addUser(response?.data?.data));
       setToastMessage("Profile saved successfully!");
       setShowToast(true);
@@ -110,7 +107,7 @@ const EditProfile = () => {
       const response = await axios.put(
         "http://localhost:4000/profile/password",
         { password: newPassword },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setToastMessage("Password updated successfully!");
       setShowToast(true);

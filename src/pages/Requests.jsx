@@ -2,16 +2,16 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequests, removeRequests } from "../utils/requestSlice";
 import { useEffect } from "react";
+import { BASE_URL } from "../utils/constants";
 const Requests = () => {
   const dispatch = useDispatch();
   const requests = useSelector((store) => store.requests);
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:4000/user/requests/received",
-        { withCredentials: true }
-      );
+      const response = await axios.get(BASE_URL + "/user/requests/received", {
+        withCredentials: true,
+      });
       dispatch(addRequests(response.data.connectionRequests));
     } catch (err) {
       console.error(err);
@@ -21,12 +21,11 @@ const Requests = () => {
   const reviewRequest = async (status, id) => {
     try {
       await axios.post(
-        `http://localhost:4000/request/review/${status}/${id}`,
+        BASE_URL + `/request/review/${status}/${id}`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       dispatch(removeRequests(id));
-
     } catch (err) {
       console.error(err);
     }
@@ -50,7 +49,9 @@ const Requests = () => {
 
   return (
     <div className="text-center my-10">
-      <h1 className="text-3xl font-stretch-expanded font-bold mb-6">Connection Requests</h1>
+      <h1 className="text-3xl font-stretch-expanded font-bold mb-6">
+        Connection Requests
+      </h1>
       <div className="max-w-4xl mx-auto">
         {requests.map((request) => {
           const { _id, fromUserId } = request;
