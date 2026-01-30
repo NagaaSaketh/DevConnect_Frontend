@@ -105,7 +105,7 @@ const EditProfile = () => {
     try {
       if (!newPassword) return;
       const response = await axios.put(
-        "http://localhost:4000/profile/password",
+        BASE_URL + "/profile/password",
         { password: newPassword },
         { withCredentials: true },
       );
